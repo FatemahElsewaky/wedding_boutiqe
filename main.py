@@ -336,7 +336,7 @@ class ProfilePage:
             separator3.place(x=640, y=150 + 8 * 30, anchor="center")  # Adjusted position and font size
             
             # Adding "My Orders" label
-            orders_label = tk.Label(master, text="My Orders", font=("Lucida Calligraphy", 20), bg='#FDE1DE', fg='black')
+            orders_label = tk.Label(master, text="Orders", font=("Lucida Calligraphy", 20), bg='#FDE1DE', fg='black')
             orders_label.pack(pady=10)
             orders_label.place(x=640, y=150 + 9 * 30, anchor="center")  # Adjusted position and font size
             

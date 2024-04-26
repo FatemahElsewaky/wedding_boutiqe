@@ -1,7 +1,6 @@
 import sqlite3
 import csv
 from prettytable import PrettyTable
-import string
 
 conn = sqlite3.connect("wedding_users.db")
 c = conn.cursor()
@@ -60,6 +59,7 @@ c.execute(
           description TEXT
           )"""
 )
+
 c.execute("CREATE INDEX IF NOT EXISTS idx_upc ON wedding_dress(upc)")
 
 # Create style table
@@ -385,16 +385,6 @@ def fetch_reviews():
         print("Error fetching reviews:", e)
         return []
 
-def insert_order(user_id, wedding_dress_upc, tracking_id, arrival_status):
-    try:
-        with conn:
-            # Insert the order into the orders table
-            c.execute("INSERT INTO orders (user_id, wedding_dress_upc, tracking_id, arrival_status) VALUES (?, ?, ?, ?)",
-                      (user_id, wedding_dress_upc, tracking_id, arrival_status))
-            print("Order placed successfully!")
-    except sqlite3.Error as error:
-        print("Failed to insert order:", error)
-
 def fetch_dress_info_employee():
     try:
         with conn:
@@ -541,14 +531,3 @@ def fetch_order_data(username):
 
     return orders
 
-
-def delete_order(order_num):
-    try:
-        with conn:
-            # Execute the SQL query to delete the specific order
-            c.execute("DELETE FROM orders WHERE order_num=?", (order_num,))
-            # Commit the transaction
-            conn.commit()
-            print(f"Order {order_num} deleted successfully!")
-    except sqlite3.Error as e:
-        print("Error deleting order:", e)

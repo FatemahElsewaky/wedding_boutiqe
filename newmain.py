@@ -437,9 +437,9 @@ class MainPage:
         container.pack(fill="both", expand=True)
 
         # Create a canvas and a scrollbar
-        canvas = tk.Canvas(container, bg='#FFF8E7')
+        canvas = tk.Canvas(container, bg='#FEF0EF')
         scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg='#FFF8E7')
+        scrollable_frame = tk.Frame(canvas, bg='#FEF0EF')
 
 
         # Configure the canvas
@@ -465,7 +465,7 @@ class MainPage:
         for i, (dress_name, upc) in enumerate(dress_data.items()):
             frame = tk.Frame(scrollable_frame, height=box_size, width=box_size, bg='pink', bd=2, relief="groove")
             frame.grid(row=i // 4, column=i % 4, padx=spacing, pady=spacing)
-            label = tk.Label(scrollable_frame, text=dress_name, font=("Arial", 18), bg='#FEF0EF')
+            label = tk.Label(scrollable_frame, text=dress_name, font=("Arial", 18), bg='#FEF0EF', fg='black')
             label.grid(row=i // 4, column=i % 4, sticky="n")
 
             # Bind click event to dress box, pass the dress_name and upc

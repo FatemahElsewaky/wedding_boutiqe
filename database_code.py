@@ -540,3 +540,15 @@ def fetch_order_data(username):
         orders.append(order)
 
     return orders
+
+
+def delete_order(order_num):
+    try:
+        with conn:
+            # Execute the SQL query to delete the specific order
+            c.execute("DELETE FROM orders WHERE order_num=?", (order_num,))
+            # Commit the transaction
+            conn.commit()
+            print(f"Order {order_num} deleted successfully!")
+    except sqlite3.Error as e:
+        print("Error deleting order:", e)

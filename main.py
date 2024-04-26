@@ -535,7 +535,7 @@ class MainPage:
             
             # Load and resize the image
             try:
-                image_path = f"{dress_name}.png"
+                image_path = f"media/{dress_name}.png"
                 pil_image = Image.open(image_path)
                 # Resize image to new width and height, using Image.LANCZOS for high quality
                 pil_image = pil_image.resize((250, 250), Image.LANCZOS)  # Adjust dimensions as needed

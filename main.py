@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, ttk, Button, PhotoImage
+from tkinter import messagebox, ttk, Button, PhotoImage, Canvas
 from PIL import ImageTk, Image
 from tkmacosx import Button
 from database_code import *
@@ -257,7 +257,6 @@ class ProfilePage:
         self.master.geometry("1280x800")  # Adjusted height for better visibility
         self.master.configure(bg='#FDE1DE')  # Cream background
 
-
         # Fetch user data from the database
         self.user_data = fetch_user_data(username)
 
@@ -265,7 +264,6 @@ class ProfilePage:
             # Display name and last name in a bigger font at the top center
             name_label = tk.Label(master, text=f"{self.user_data['first_name']} {self.user_data['last_name']}",
                                   font=("Lucida Calligraphy", 36), bg='#FDE1DE', fg='black')
-
             name_label.pack(pady=20)
 
             # Adding a line for separation
@@ -275,7 +273,6 @@ class ProfilePage:
             # Display username in a better position
             username_label = tk.Label(master, text=f"Username: {self.user_data['username']}",
                                       font=("Brush Script MT", 20), bg='#FDE1DE', fg='black')
-
             username_label.pack(pady=10)
 
             # Adding more separation
@@ -290,7 +287,6 @@ class ProfilePage:
                 if key not in ["first_name", "last_name", "username", "payment_id"]:
                     label = tk.Label(master, text=f"{key.replace('_', ' ').title()}: ", font=("Brush Script MT", 16),
                                      bg='#FDE1DE', fg='black')
-
                     label.place(x=640 - 150, y=150 + row * 30, anchor="e")
                     self.labels[key] = label
 
@@ -299,9 +295,8 @@ class ProfilePage:
                     entry.place(x=640 - 100, y=150 + row * 30, anchor="w")
                     self.entry_fields[key] = entry
 
-                    edit_button = tk.Button(master, text="Update", command=lambda k=key: self.edit_field(k),
-                                             bg='#FDE1DE', fg='black', font=("Lucida Calligraphy", 14))
-
+                    edit_button = tk.Button(master, text="Edit", command=lambda k=key: self.edit_field(k),
+                                            bg='#FDE1DE', fg='black', font=("Lucida Calligraphy", 14))
                     edit_button.place(x=640 + 100, y=150 + row * 30, anchor="w")
 
                     row += 1
@@ -310,7 +305,6 @@ class ProfilePage:
             if 'payment_id' in self.user_data and self.user_data['payment_id']:
                 payment_label = tk.Label(master, text="Payment Information", font=("Lucida Calligraphy", 20),
                                          bg='#FDE1DE', fg='black')
-
                 payment_label.place(x=640, y=150 + row * 30, anchor="n")
 
                 row += 1
@@ -319,7 +313,6 @@ class ProfilePage:
                     label = tk.Label(master, text=f"{field.replace('_', ' ').title()}: ",
                                      font=("Brush Script MT", 16),
                                      bg='#FDE1DE', fg='black')
-
                     label.place(x=640 - 150, y=150 + row * 30, anchor="e")
                     self.labels[field] = label
 
@@ -328,18 +321,59 @@ class ProfilePage:
                     entry.place(x=640 - 100, y=150 + row * 30, anchor="w")
                     self.entry_fields[field] = entry
 
-                    edit_button = tk.Button(master, text="Update", command=lambda k=field: self.edit_field(k),
+                    edit_button = tk.Button(master, text="Edit", command=lambda k=field: self.edit_field(k),
                                             bg='#FDE1DE', fg='black', font=("Lucida Calligraphy", 14))
-
                     edit_button.place(x=640 + 100, y=150 + row * 30, anchor="w")
 
                     row += 1
+
+            window_width = master.winfo_width()
+
+            # Adding a line for separation after payment information
+            separator3 = Canvas(master, width=1280, height=2, bg='black', highlightthickness=0)
+            separator3.create_line(0, 0, 1280, 0, fill='black', width=2)
+            separator3.pack(pady=10)
+            separator3.place(x=640, y=150 + 8 * 30, anchor="center")  # Adjusted position and font size
+            
+            # Adding "My Orders" label
+            orders_label = tk.Label(master, text="My Orders", font=("Lucida Calligraphy", 20), bg='#FDE1DE', fg='black')
+            orders_label.pack(pady=10)
+            orders_label.place(x=640, y=150 + 9 * 30, anchor="center")  # Adjusted position and font size
+            
+
+            # Adding a line for separation after payment information
+            separator4 = Canvas(master, width=1280, height=2, bg='black', highlightthickness=0)
+            separator4.create_line(0, 0, 1280, 0, fill='black', width=2)
+            separator4.pack(pady=10)
+            separator4.place(x=640, y=150 + 10 * 30, anchor="center")  # Adjusted position and font size
+
+
+            # Fetch order data from the database
+            self.order_data = fetch_order_data(username)
+
+            if self.order_data:
+               
+                # Adjusting the starting row for order display
+                row += 2
+                # Display the order information in the middle of the page
+                for order in self.order_data:
+                    for key, value in order.items():
+                        label = tk.Label(master, text=f"{key.replace('_', ' ').title()}: {value}",
+                                         font=("Brush Script MT", 20), bg='#FDE1DE', fg='black')
+                        label.place(x=640, y=150 + row * 30, anchor="center")  # Adjusted position and font size
+                        row += 1
+
+            else:
+                # Display message if order data is not found
+                error_label = tk.Label(master, text="No orders", font=("Arial", 20), bg='#FDE1DE', fg='black')
+                error_label.pack(pady=20)
+                error_label.place(x=640, y=150 + 12 * 30, anchor="center")  # Adjusted position and font size
+
 
         else:
             # Display message if user data is not found
             error_label = tk.Label(master, text="User data not found", font=("Arial", 20), bg='#FDE1DE', fg='red')
             error_label.pack(pady=20)
-        
 
     def edit_field(self, field):
         entry = self.entry_fields[field]  # Retrieve the entry field associated with the edited value

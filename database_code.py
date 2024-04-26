@@ -542,3 +542,20 @@ def insert_order(user_id, wedding_dress_upc, tracking_id, arrival_status):
         print("Failed to insert order:", error)
 
 
+def delete_order(order_num):
+    try:
+        with conn:
+            # Execute the SQL query to delete the specific order
+            c.execute("DELETE FROM orders WHERE order_num=?", (order_num,))
+            # Commit the transaction
+            conn.commit()
+            print(f"Order {order_num} deleted successfully!")
+    except sqlite3.Error as e:
+        print("Error deleting order:", e)
+
+# delete_order(1)
+# delete_order(2)
+# delete_order(3)
+# delete_order(4)
+# delete_order(5)
+# delete_order(6)

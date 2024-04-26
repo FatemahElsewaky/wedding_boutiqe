@@ -841,6 +841,205 @@ class MainPage:
         app = HomePage(root)
         root.mainloop()
 
+class UploadPage:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Upload Wedding Dresses")
+        self.master.geometry("800x800")
+        self.master.configure(bg='#FDE1DE')  # Cream background
+
+        self.label = tk.Label(master, text="Upload Wedding Dresses", font=("Lucida Calligraphy", 24), bg='#FDE1DE',
+                              fg='black')
+        self.label.pack(pady=20)
+
+        # Create button to trigger upload
+        self.upload_button = tk.Button(master, text="Upload Dresses", command=self.open_dress_info_window,
+                                       bg='white', fg='black',
+                                       font=("Lucida Calligraphy", 18), width=25, height=4,
+                                       bd=1, relief="solid", highlightbackground="black")
+        self.upload_button.pack(pady=10)
+
+        # Create button to open window for updating wedding dress table
+        self.update_button = tk.Button(master, text="Update Wedding Dresses", command=self.open_update_window,
+                                       bg='white', fg='black',
+                                       font=("Lucida Calligraphy", 18), width=25, height=4,
+                                       bd=1, relief="solid", highlightbackground="black")
+        self.update_button.pack(pady=10)
+
+        # Create button to add new dress
+        self.add_button = tk.Button(master, text="Add Dress", command=self.open_add_window, bg='white', fg='black',
+                                    font=("Lucida Calligraphy", 18), width=25, height=4,
+                                    bd=1, relief="solid", highlightbackground="black")
+        self.add_button.pack(pady=10)
+
+        # Create button to delete dress
+        self.delete_button = tk.Button(master, text="Delete Dress", command=self.open_delete_window,
+                                       bg='white', fg='black',
+                                       font=("Lucida Calligraphy", 18), width=25, height=4,
+                                       bd=1, relief="solid", highlightbackground="black")
+        self.delete_button.pack(pady=10)
+
+    def open_dress_info_window(self):
+        # Create a new window for dress information
+        dress_info_window = tk.Toplevel(self.master)
+        dress_info_window.title("Dress Info Employee")
+
+        # Create a treeview to display the dress info in a table
+        tree = ttk.Treeview(dress_info_window)
+        tree["columns"] = (
+            "UPC", "Name", "Price", "Color", "Description", "Elegant", "Vintage", "Princess", "Boho", "C1", "C2")
+        for col in tree["columns"]:
+            tree.heading(col, text=col)
+            tree.column(col, anchor="center")
+
+        # Fetch dress info as dictionaries
+        dress_info = fetch_dress_info_employee()
+        for i, dress in enumerate(dress_info, start=1):
+            tree.insert("", "end", text=str(i), values=list(dress.values()))
+
+        # Adjust column widths based on content
+        for col in tree["columns"]:
+            tree.heading(col, text=col, command=lambda _col=col: self.sort_column(tree, _col, False))
+            max_width = max(len(tree.set(child, col)) for child in tree.get_children())
+            tree.column(col, width=max_width * 10)  # Adjust the multiplier as needed
+
+        tree.pack(expand=True, fill=tk.BOTH)
+
+    def open_update_window(self):
+        # Create new window for updating dress info
+        update_window = tk.Toplevel(self.master)
+        update_window.title("Update Wedding Dress")
+        update_window.geometry("600x600")
+        update_window.configure(bg='#FDE1DE')
+
+        labels = ["UPC", "Name", "Price", "Color", "Description", "Elegant", "Vintage", "Princess", "Boho", "C1", "C2"]
+        self.entries = []
+
+        # Create entry boxes associated with labels in two columns
+        for i, label_text in enumerate(labels):
+            row = i // 2  # Calculate row index
+            column = i % 2  # Calculate column index
+            label = tk.Label(update_window, text=label_text, font=("Arial", 12), bg='#FDE1DE', fg='black')
+            label.grid(row=row, column=column * 2, padx=5, pady=5)
+            entry = tk.Entry(update_window, font=("Arial", 12))
+            entry.grid(row=row, column=column * 2 + 1, padx=5, pady=5)
+            self.entries.append(entry)
+        update_button = tk.Button(update_window, text="Update", command=self.update_dress,
+                                  bg='white', fg='black',
+                                  font=("Lucida Calligraphy", 16), width=6, height=2,
+                                  bd=1, relief="solid", highlightbackground="black"
+                                  )
+        update_button.grid(row=(len(labels) + 1) // 2, column=0, columnspan=2, pady=20)  # Span across two columns
+
+    def update_dress(self):
+        # Get data from entry widgets
+        data = [entry.get() for entry in self.entries]
+
+        # Extract specific fields from data
+        upc, name, price, color = data[:4]
+
+        # Check if any of the required fields are empty
+        if not (upc and name and price and color):
+            messagebox.showerror("Error", "Please fill in all required fields (UPC, Name, Price, Color)")
+            return
+        # Print the data for debugging
+        print("Data to be updated:", data)
+
+        # Call the updatedress function with extracted data
+        success = updatedress(*data)
+
+        #Check if the update was successful
+        if success:
+            messagebox.showinfo("Success", "Dress updated successfully")
+        else:
+            messagebox.showerror("Error", "Failed to update dress")
+
+    def open_add_window(self):
+        # Create new window for updating dress info
+        update_window = tk.Toplevel(self.master)
+        update_window.title("Add Wedding Dress")
+        update_window.geometry("600x600")
+        update_window.configure(bg='#FDE1DE')
+
+        labels = ["UPC", "Name", "Price", "Color", "Description", "Elegant", "Vintage", "Princess", "Boho", "C1", "C2"]
+        self.entries = []
+
+        # Create entry boxes associated with labels in two columns
+        for i, label_text in enumerate(labels):
+            row = i // 2  # Calculate row index
+            column = i % 2  # Calculate column index
+            label = tk.Label(update_window, text=label_text, font=("Arial", 12), bg='#FDE1DE', fg='black')
+            label.grid(row=row, column=column * 2, padx=5, pady=5)
+            entry = tk.Entry(update_window, font=("Arial", 12))
+            entry.grid(row=row, column=column * 2 + 1, padx=5, pady=5)
+            self.entries.append(entry)
+        update_button = tk.Button(update_window, text="Add", command=self.add_dress,
+                                  bg='white', fg='black',
+                                  font=("Lucida Calligraphy", 16), width=6, height=2,
+                                  bd=1, relief="solid", highlightbackground="black"
+                                  )
+        update_button.grid(row=(len(labels) + 1) // 2, column=0, columnspan=2, pady=20)  # Span across two columns
+
+    def add_dress(self):
+        # Get data from entry widgets
+        data = [entry.get() for entry in self.entries]
+
+        # Extract specific fields from data
+        upc, name, price, color = data[:4]
+
+        # Check if any of the required fields are empty
+        if not (upc and name and price and color):
+            messagebox.showerror("Error", "Please fill in all required fields (UPC, Name, Price, Color)")
+            return
+        # Print the data for debugging
+        print("Data to be added:", data)
+
+        # Call the add_wedding_dress function with extracted data
+        success = add_wedding_dress(*data)
+
+        #Check if the added was successful
+        if success:
+            messagebox.showinfo("Success", "Dress added successfully")
+        else:
+            messagebox.showerror("Error", "Failed to added dress")
+
+    def open_delete_window(self):
+        # Create new window for deleting dress
+        delete_window = tk.Toplevel(self.master)
+        delete_window.title("Delete Wedding Dress")
+        delete_window.geometry("300x200")
+        delete_window.configure(bg='#FDE1DE')
+
+        # Create label and entry for UPC
+        upc_label = tk.Label(delete_window, text="UPC:", font=("Arial", 12), bg='#FDE1DE', fg='black')
+        upc_label.pack(pady=10)
+        self.upc_entry = tk.Entry(delete_window, font=("Arial", 12))
+        self.upc_entry.pack(pady=5)
+
+        # Create button to delete dress
+        delete_button = tk.Button(delete_window, text="Delete", command=self.delete_dress, bg='white', fg='black',
+                                  font=("Lucida Calligraphy", 16), width=6, height=2,
+                                  bd=1, relief="solid", highlightbackground="black"
+                                  )
+        delete_button.pack(pady=10)
+
+    def delete_dress(self):
+        # Get UPC from entry widget
+        upc = self.upc_entry.get()
+
+        if not upc:
+            messagebox.showerror("Error", "Please fill in all required fields (UPC)")
+            return
+
+        success = delete_wedding_dress(upc)
+
+        # Check if the deletion was successful
+        if success:
+            messagebox.showinfo("Success", "Dress deleted successfully")
+        else:
+            messagebox.showerror("Error", "Failed to deleted dress")
+
+
 
 class EmployeeUpdatePage:
     def __init__(self, master, employee_id):
@@ -925,8 +1124,9 @@ class EmployeeUpdatePage:
 
 
     def update_wedding_info(self):
-        # Placeholder function to navigate to update wedding database information page
-        print("Navigate to update wedding database information page")
+        root = tk.Toplevel()  # Create a new Tkinter root window for the main page
+        app = UploadPage(root)  # Open the choose to edit account or database
+        root.mainloop()
 
 class UpdateEmployeeInfoPage:
     def __init__(self, master, employee_id):

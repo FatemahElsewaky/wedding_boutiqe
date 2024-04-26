@@ -15,7 +15,7 @@ def fetch_dress_details(dress_name):
     cursor = connection.cursor()
 
     # SQL query to fetch dress details
-    query = "SELECT name, price, color, description FROM dress_info_users WHERE name = ?"
+    query = "SELECT upc, name, price, color,description FROM wedding_dress WHERE name = ?"
     cursor.execute(query, (dress_name,))
     dress_details = cursor.fetchone()
         
@@ -34,124 +34,11 @@ def create_footer(master):
 
     return footer_frame
 
-
-class DressPage:
-    def __init__(self, master, dress_number, main_page, username):
-        self.username = username  # Store username as an attribute
-        self.master = master
-        self.dress_number = dress_number
-        self.main_page = main_page
-        #self.main_page_instance = main_page_instance
-        self.master.geometry("1280x1920")
-        self.master.configure(bg='#FFF8E7')  # Cream background
-        self.label = tk.Label(master, text="H.E.M.", font=("Lucida Calligraphy", 48), bg='#FFF8E7', fg='black')
-        self.label.pack(pady=20)
-
-        # Create a frame to hold the canvas and scrollbar
-        main_frame = tk.Frame(self.master)
-        main_frame.pack(fill="both", expand=True)
-
-        # Create a canvas and a scrollbar
-        canvas = tk.Canvas(main_frame, bg='#FFF8E7')
-        scrollbar = tk.Scrollbar(main_frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg='#FFF8E7')
-
-        # Configure the canvas
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        # Pack everything
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-
-        # Bind the frame to the canvas
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-        )
-
-        # Create the image frame on the left , bg="black", width=550, height=733
-        self.image_frame = tk.Frame(scrollable_frame, bg="#FFF8E7", width=400, height=400)
-        self.image_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        # # Create the image frame on the left , bg="black", width=550, height=733
-        # self.image_frame = tk.Frame(self.main_frame, bg="#FFF8E7", width=640, height=960)
-        # self.image_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-
-        image_path = "dress-image.png"
-        # Load the dress image
-        try:
-            self.dress_image = Image.open(image_path)
-            # self.dress_image = self.dress_image.resize((640, 960))  # Resize the image if necessary
-            self.photo = ImageTk.PhotoImage(self.dress_image)
-
-            # Display the image in a label
-            self.image_label = tk.Label(self.image_frame, image=self.photo, borderwidth=0)
-            self.image_label.pack(padx=20, pady=20)
-
-        except FileNotFoundError:
-            print("Image file not found.")
-        except Exception as e:
-            print("Error:", e)
-
-        # Create the info frame on the right
-        # Create the info frame on the right
-        self.info_frame = tk.Frame(scrollable_frame, bg="#FFF8E7", width=400, height=400)
-        self.info_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
-
-        # Display dress information
-        self.description_label = tk.Label(self.info_frame, text="LEONIE", font=("Lucida Calligraphy", 44), bg="#FFF8E7")
-        self.description_label.pack(pady=(20, 10))
-        # Display dress information
-        self.description_label = tk.Label(self.info_frame, text="Dress Color:", font=("Lucida Calligraphy", 20),
-                                          bg="#FFF8E7")
-
-        self.description_label.pack(pady=(20, 10))
-
-        # Create measurement entry boxes
-        self.measurement_labels = []
-        self.measurement_entries = []
-        for measurement in ["Bust", "Waist", "Hips", "Height"]:
-            label = tk.Label(self.info_frame, text=f"{measurement}:", font=("Lucida Calligraphy", 20), bg="#FFF8E7")
-
-            label.pack(pady=(10, 0))
-            self.measurement_labels.append(label)
-
-            entry = tk.Entry(self.info_frame, font=("Lucida Calligraphy", 20), highlightthickness=0)
-            entry.pack()
-            self.measurement_entries.append(entry)
-
-        # Buy now button
-        self.buy_button = Button(self.info_frame, text="Buy Now", command=self.go_to_checkout,
-                                 font=("Lucida Calligraphy", 20),
-                                 width=200, height=100, bg="black", fg="white", borderless=1)
-        self.buy_button.pack(pady=20)
-
-        # Back Button
-        back_button = tk.Button(self.master, text="Back", font=("Lucida Calligraphy", 18),
-                                command=self.go_to_previous_page)
-        back_button.pack(pady=10)
-
-    def go_to_checkout(self):
-        # Placeholder function to navigate to checkout page
-        print("Navigating to checkout page")
-        checkout_window = tk.Toplevel(self.master)
-        checkout_window.geometry("800x600")
-        checkout_window.title("Checkout")
-        # checkout_page = CheckoutPage(checkout_window, "user1")
-        checkout_page = CheckoutPage(checkout_window, self.username)
-
-    def go_to_previous_page(self):
-        # Placeholder function to navigate to the previous page
-        print("Going back to the previous page")
-        # Destroy the current dress page
-        self.master.destroy()
-        # Show the wedding dresses page
-        self.main_page.show_wedding_dresses()
-
 class CheckoutPage:
-    def __init__(self, master, username):
+    def __init__(self, master, username, upc):
         self.master = master
         self.username = username
+        self.upc = upc
         self.master.title("Checkout")
         self.master.geometry("800x600")  # Adjusted height for better visibility
         self.master.configure(bg='#FDE1DE')
@@ -232,7 +119,7 @@ class CheckoutPage:
         print("Placing order...")
         # Here you would add the logic to insert the order into the database
         user_id = self.username  # Assuming the username serves as the user_id
-        wedding_dress_upc = "260235696944"
+        wedding_dress_upc = self.upc
         tracking_id = str(uuid.uuid4())[:18]  # Get the first 18 characters of the UUID
         arrival_status = "Pending"  # Set initial arrival status
         # Call the insert_order function to add the order to the database
@@ -581,11 +468,11 @@ class MainPage:
                 print(f"Failed to load image: {e}")
                 tk.Label(dress_window, text="Failed to load image", bg='white', width=50, height=20).pack(pady=(10, 0))
             
-            tk.Label(dress_window, text=f"Price: {dress_details[1]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
-            tk.Label(dress_window, text=f"Color: {dress_details[2]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
+            tk.Label(dress_window, text=f"Price: {dress_details[2]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
+            tk.Label(dress_window, text=f"Color: {dress_details[3]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
             tk.Label(dress_window, text="Description Placeholder", bg='white', width=50, height=10).pack(pady=(10, 0))
             
-            checkout_button = tk.Button(dress_window, text="Checkout", command=lambda: DressPage.go_to_checkout(self))
+            checkout_button = tk.Button(dress_window, text="Checkout", command=lambda: self.go_to_checkout(dress_details[0]))
             checkout_button.pack(pady=20)
         else:
             messagebox.showerror("Error", "Dress details not found.")
@@ -615,20 +502,22 @@ class MainPage:
             # Display dress details
             tk.Label(dress_window, text=f"Name: {dress_name}", font=("Arial", 16)).pack(pady=10)
             tk.Label(dress_window, text=f"UPC: {upc}", font=("Arial", 16)).pack(pady=10)
-            tk.Label(dress_window, text=f"Price: {details[1]}", font=("Arial", 16)).pack(pady=10)
-            tk.Label(dress_window, text=f"Color: {details[2]}", font=("Arial", 16)).pack(pady=10)
-            tk.Label(dress_window, text=f"Description: {details[3]}", font=("Arial", 16)).pack(pady=10)
+            tk.Label(dress_window, text=f"Price: {details[2]}", font=("Arial", 16)).pack(pady=10)
+            tk.Label(dress_window, text=f"Color: {details[3]}", font=("Arial", 16)).pack(pady=10)
+            tk.Label(dress_window, text=f"Description: {details[4]}", font=("Arial", 16)).pack(pady=10)
 
             # Optionally add a 'Close' button
             close_btn = tk.Button(dress_window, text="Close", command=dress_window.destroy)
             close_btn.pack(pady=20)
 
-    def show_dress_page(self, dress_number):
-        # Create a new dress page and pass dress information if needed
-        root = tk.Toplevel(self.master)
-
-        dress_page = DressPage(root, dress_number, self)
-        root.mainloop()
+    def go_to_checkout(self, upc):
+        # Placeholder function to navigate to checkout page
+        print("Navigating to checkout page")
+        checkout_window = tk.Toplevel(self.master)
+        checkout_window.geometry("800x600")
+        checkout_window.title("Checkout")
+        # checkout_page = CheckoutPage(checkout_window, "user1")
+        checkout_page = CheckoutPage(checkout_window, self.username, upc)
 
     def show_collections(self):
         # Clear the current content if necessary

@@ -279,6 +279,15 @@ class MainPage:
 
         self.label = tk.Label(master, text="H.E.M.", font=("Lucida Calligraphy", 40), bg='#FEF0EF', fg='black')
         self.label.pack(pady=20)
+        self.dress_data = {
+            'LEONIE': '260235696944', 'BRYNLEE': '366054713060', 'RHYA': '765243351243',
+            'HARMONIA': '573762794674', 'MEMPHIS': '247304459935', 'DORI': '223401317803',
+            'CARMELLA': '734562441382', 'LUXIA': '549306732031', 'RAMONA': '570882701357',
+            'ARACELY': '213175329642', 'BELLIMISA': '379570679859', 'MAIA': '716922330344',
+            'TATITANA': '997242272963', 'AURORA': '313455989872', 'NEELA': '144691041532',
+            'DOLORES': '532619135710', 'JOLENE': '204820886951', 'VARELLA': '669304145861',
+            'SERAPHINE': '381006261038', 'IRIS': '828169952218'
+        }
 
         # Set background color for the menu bar
         menu_bg_color = self.master.cget("bg")
@@ -288,7 +297,7 @@ class MainPage:
         menu_frame.pack(side=tk.TOP, pady=10)
 
         # Create a dropdown button for the account
-        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color,
+        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color, fg='black',
                                           font=("Brush Script MT", 18))
         self.account_menu.menu = tk.Menu(self.account_menu, tearoff=0)
         self.account_menu["menu"] = self.account_menu.menu
@@ -301,6 +310,12 @@ class MainPage:
         # Configure button style to remove button shape
         button_style = {"border": 1, "bg": menu_bg_color, "width": 13, "height": 2, "highlightbackground": "black",
                         "relief": "solid"}
+
+    # At the class level
+        self.vintage_dresses = ['LEONIE', 'BRYNLEE', 'HARMONIA', 'RHYA', 'DORI']
+        self.princess_dresses = ['CARMELLA', 'LUXIA', 'RAMONA', 'ARACELY', 'BELLIMISA']
+        self.boho_dresses = ['MAIA', 'DOLORES', 'TATITANA', 'AURORA', 'NEELA']
+        self.elegant_dresses = ['JOLENE', 'MEMPHIS', 'VARELLA', 'SERAPHINE', 'IRIS']
 
         buttons_data = [
             ("Wedding Dresses",
@@ -374,11 +389,6 @@ class MainPage:
             review_frame = tk.Frame(scrollable_inner_frame, bg='#FEF0EF')
             review_frame.pack(pady=20)
 
-            # Load and display photo
-            photo_label = tk.Label(review_frame, text="Photo placeholder", width=40, height=20,
-                                   bg='white', fg='black', font=("Arial", 16))
-            photo_label.pack(side=tk.LEFT, padx=50)
-
             stars_label = tk.Label(review_frame, text=f"Stars: {review['stars']}", font=("Arial", 20),
                                    bg='#FEF0EF', fg='black')
             stars_label.pack(pady=5, padx=20)
@@ -388,11 +398,11 @@ class MainPage:
             user_label.pack(padx=20)
 
             # Display review text
-            text_widget = tk.Text(review_frame, wrap=tk.WORD, height=5, width=50, font=("Arial", 20), bg='#FEF0EF',
+            text_widget = tk.Text(review_frame, wrap=tk.WORD, height=5, width=50, font=("Arial", 20), bg='#FEF0EF', fg='black',
                                   bd=0, highlightthickness=0)
             text_widget.insert(tk.END, review['comment'])  # Insert the comment text
             text_widget.config(state=tk.DISABLED)  # Disable editing
-            text_widget.pack(side=tk.RIGHT, padx=20)
+            text_widget.pack(side=tk.LEFT, padx=20)
 
 
     def show_wedding_dresses(self):
@@ -422,9 +432,9 @@ class MainPage:
         container.pack(fill="both", expand=True)
 
         # Create a canvas and a scrollbar
-        canvas = tk.Canvas(container, bg='#FFF8E7')
+        canvas = tk.Canvas(container, bg='#FEF0EF')
         scrollbar = tk.Scrollbar(container, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, bg='#FFF8E7')
+        scrollable_frame = tk.Frame(canvas, bg='#FEF0EF')
 
 
         # Configure the canvas
@@ -450,7 +460,7 @@ class MainPage:
         for i, (dress_name, upc) in enumerate(dress_data.items()):
             frame = tk.Frame(scrollable_frame, height=box_size, width=box_size, bg='pink', bd=2, relief="groove")
             frame.grid(row=i // 4, column=i % 4, padx=spacing, pady=spacing)
-            label = tk.Label(scrollable_frame, text=dress_name, font=("Arial", 18), bg='#FEF0EF')
+            label = tk.Label(scrollable_frame, text=dress_name, font=("Arial", 18), bg='#FEF0EF', fg='black')
             label.grid(row=i // 4, column=i % 4, sticky="n")
 
             # Bind click event to dress box, pass the dress_name and upc
@@ -489,7 +499,7 @@ class MainPage:
             
             tk.Label(dress_window, text=f"Price: {dress_details[2]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
             tk.Label(dress_window, text=f"Color: {dress_details[3]}", font=("Lucida Calligraphy", 16)).pack(pady=(10, 0))
-            tk.Label(dress_window, text="Description Placeholder", bg='white', width=50, height=10).pack(pady=(10, 0))
+            tk.Label(dress_window, text=f"Description: {dress_details[4]}", bg='white', fg='black', width=50, height=10).pack(pady=(10, 0))
             
             checkout_button = tk.Button(dress_window, text="Checkout", command=lambda: self.go_to_checkout(dress_details[0]))
             checkout_button.pack(pady=20)
@@ -552,13 +562,11 @@ class MainPage:
 
         # Box 1 for Collection 1
         box1 = tk.LabelFrame(collections_frame, text="Eternal Whisper", font=("Brush Script MT", 24), bg='white',
-
                             fg='black', labelanchor='n', width=500, height=300)
         box1.pack(side="left", expand=True, fill="both", padx=10, pady=10)
         box1.pack_propagate(False)
-        info1 = tk.Label(box1, text="Classic and timeless bridal gowns.", bg='white', fg='black', font=("Arial", 16))
+        info1 = tk.Label(box1, text="Classic and timeless bridal gowns.", bg='white', fg='black', font=("Lucida Calligraphy", 25))
         info1.pack(expand=True)
-
         box1.bind("<Button-1>", lambda e: self.show_collection_dresses(0))  # Show the first 10 dresses
 
         # Box 2 for Collection 2
@@ -567,7 +575,7 @@ class MainPage:
         box2.pack(side="right", expand=True, fill="both", padx=10, pady=10)
         box2.pack_propagate(False)
         info2 = tk.Label(box2, text="Modern designs with a touch of the stars.", bg='white', fg='black',
-                        font=("Arial", 16))
+                        font=("Lucida Calligraphy", 25))
         info2.pack(expand=True)
         box2.bind("<Button-1>", lambda e: self.show_collection_dresses(10))  # Show the last 10 dresses
 
@@ -577,6 +585,9 @@ class MainPage:
 
         # Update the window to reconfigure its size and position
         self.master.geometry("1280x800")  # Resize window back to the main app size
+
+
+
 
     def show_collection_dresses(self, start_index):
         collection_window = tk.Toplevel(self.master)
@@ -643,6 +654,7 @@ class MainPage:
         back_button = tk.Button(collection_window, text="Back", command=collection_window.destroy)
         back_button.pack(pady=20)
 
+
     def setup_homepage(self):
         # Clear existing content
         for widget in self.master.winfo_children():
@@ -681,7 +693,7 @@ class MainPage:
         menu_frame.pack(side=tk.TOP, pady=10)
 
         # Create a dropdown button for the account
-        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color,
+        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color, fg='black',
                                           font=("Brush Script MT", 18))
         self.account_menu.menu = tk.Menu(self.account_menu, tearoff=0)
         self.account_menu["menu"] = self.account_menu.menu
@@ -693,7 +705,7 @@ class MainPage:
         self.account_menu.pack(side=tk.RIGHT, padx=10)
         # Configure button style to remove button shape
         button_style = {"border": 1, "bg": menu_bg_color, "width": 13, "height": 2, "highlightbackground": "black",
-                        "relief": "solid"}
+                        "relief": "solid", "fg":"black"}
 
         buttons_data = [
             ("Wedding Dresses",
@@ -747,46 +759,62 @@ class MainPage:
             widget.destroy()
 
         # Title label for the styles page
-
-        self.label = tk.Label(self.master, text="Choose Your Style", font=("Lucida Calligraphy", 48), bg='#FEF0EF',
-                              fg='black')
+        self.label = tk.Label(self.master, text="Choose Your Style", font=("Lucida Calligraphy", 48), bg='#FEF0EF', fg='black')
         self.label.pack(pady=20)
 
         # Frame for styles
-
         styles_frame = tk.Frame(self.master, bg='#FEF0EF')
-        styles_frame.pack(expand=True, fill="both", padx=20, pady=20)
+        styles_frame.pack(expand=True, fill="both", pady=20)
 
         # Data for each style box
         styles_data = [
-            ("Elegant", "Sophisticated and refined gowns."),
-            ("Boho", "Relaxed and free-spirited designs."),
-            ("Vintage", "Timeless classics with an old-world charm."),
-            ("Princess", "Fairy-tale inspired, dreamy and grand.")
+            ("Elegant", self.elegant_dresses),
+            ("Boho", self.boho_dresses),
+            ("Vintage", self.vintage_dresses),
+            ("Princess", self.princess_dresses)
         ]
 
         # Create style boxes
-        for style, description in styles_data:
-            self.create_style_box(styles_frame, style, description)
-
+        for style, dresses in styles_data:
+            button = tk.Button(styles_frame, text=style, font=("Brush Script MT", 24), bg='white', fg='black',
+                            command=lambda d=dresses: self.display_style_dresses(d, style))
+            button.pack(side="left", padx=10, pady=10, expand=True)
 
         # Back Button
-        back_button = tk.Button(self.master, text="Back", font=("Lucida Calligraphy", 18),
-                                command=self.show_main_page)
+        back_button = tk.Button(self.master, text="Back", font=("Lucida Calligraphy", 18), command=self.show_main_page)
         back_button.pack(pady=10)
 
-        # Update the window to reconfigure its size and position
-        self.master.geometry("1280x800")  # Resize window back to the main app size
 
-    def create_style_box(self, parent, title, description):
-        """Helper function to create a styled box for the styles page."""
-        box = tk.LabelFrame(parent, text=title, font=("Brush Script MT", 24), bg='white', fg='black', labelanchor='n',
-                            width=300, height=300)
-        box.pack(side="left", expand=True, fill="both", padx=10, pady=10)
-        box.pack_propagate(False)
-        info = tk.Label(box, text=description, bg='white', fg='black', font=("Arial", 16))
-        info.pack(expand=True)
-        box.bind("<Button-1>", lambda e: messagebox.showinfo(title, f"{title} style: {description}"))
+
+    def display_style_dresses(self, dresses, style_name):
+        """Display dresses for the selected style in a new window with clickable boxes."""
+        dress_window = tk.Toplevel(self.master)
+        dress_window.title(f"{style_name} Dresses")
+        dress_window.geometry("1280x1920")
+        dress_window.configure(bg='#FEF0EF')
+
+        tk.Label(dress_window, text=f"{style_name} Style Dresses", font=("Lucida Calligraphy", 36), bg='#FEF0EF').pack(pady=20)
+
+        container = tk.Frame(dress_window)
+        container.pack(fill="both", expand=True)
+
+        # Horizontal layout
+        scrollable_frame = tk.Frame(container, bg='#FEF0EF')
+        scrollable_frame.pack(fill="both", expand=True)
+
+        for dress in dresses:
+            upc = self.dress_data.get(dress, "Unknown UPC")  # Get UPC or default to 'Unknown UPC'
+            # Creating larger frames for each dress
+            frame = tk.Frame(scrollable_frame, height=300, width=300, bg='pink', bd=2, relief="groove")
+            frame.pack(side="left", padx=20, pady=10, expand=True)
+            label = tk.Label(frame, text=dress, font=("Arial", 20), bg='pink')
+            label.pack(expand=True, fill="both")
+            label.bind("<Button-1>", lambda event, d=dress, u=upc: self.on_dress_box_click(d, u))
+
+        back_button = tk.Button(dress_window, text="Back", font=("Lucida Calligraphy", 18), command=dress_window.destroy)
+        back_button.pack(pady=20)
+
+
 
     def show_profile(self):
         print("Showing Profile Page")

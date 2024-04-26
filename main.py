@@ -431,6 +431,25 @@ class MainPage:
 
         # Center the menu bar horizontally
         menu_frame.place(relx=.5, rely=.15, anchor=tk.CENTER)
+
+        # Create a frame to hold the photo boxes
+        photo_frame = tk.Frame(master, bg='#FEF0EF')
+        photo_frame.pack(pady=20)
+        photo_frame.place(relx=0.5, rely=0.58, anchor=tk.CENTER)
+
+        # Placeholder images, replace with actual photo paths
+        image_paths = ["media/VARELLA.png", "media/ARACELY.png"]
+
+        for image_path in image_paths:
+            img = Image.open(image_path)
+            img = img.resize((400, 400))  # Resize the image
+            photo = ImageTk.PhotoImage(img)
+
+            # Create photo box
+            photo_box = tk.Label(photo_frame, image=photo)
+            photo_box.image = photo  # Store reference to prevent garbage collection
+            photo_box.pack(side=tk.LEFT, padx=40)
+
         self.footer = create_footer(master)
 
         # Create a frame for reviews
@@ -803,6 +822,25 @@ class MainPage:
 
         # Center the menu bar horizontally
         menu_frame.place(relx=.5, rely=.15, anchor=tk.CENTER)
+
+        # Create a frame to hold the photo boxes
+        photo_frame = tk.Frame(self.master, bg='#FEF0EF')
+        photo_frame.pack(pady=20)
+        photo_frame.place(relx=0.5, rely=0.58, anchor=tk.CENTER)
+
+        # Placeholder images, replace with actual photo paths
+        image_paths = ["media/VARELLA.png", "media/ARACELY.png"]
+
+        for image_path in image_paths:
+            img = Image.open(image_path)
+            img = img.resize((400, 400))  # Resize the image
+            photo = ImageTk.PhotoImage(img)
+
+            # Create photo box
+            photo_box = tk.Label(photo_frame, image=photo)
+            photo_box.image = photo  # Store reference to prevent garbage collection
+            photo_box.pack(side=tk.LEFT, padx=40)
+
         self.footer = create_footer(self.master)
 
         # Create a frame for reviews

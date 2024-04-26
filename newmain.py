@@ -297,7 +297,7 @@ class MainPage:
         menu_frame.pack(side=tk.TOP, pady=10)
 
         # Create a dropdown button for the account
-        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color,
+        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color, fg='black',
                                           font=("Brush Script MT", 18))
         self.account_menu.menu = tk.Menu(self.account_menu, tearoff=0)
         self.account_menu["menu"] = self.account_menu.menu
@@ -389,11 +389,6 @@ class MainPage:
             review_frame = tk.Frame(scrollable_inner_frame, bg='#FEF0EF')
             review_frame.pack(pady=20)
 
-            # Load and display photo
-            photo_label = tk.Label(review_frame, text="Photo placeholder", width=40, height=20,
-                                   bg='white', fg='black', font=("Arial", 16))
-            photo_label.pack(side=tk.LEFT, padx=50)
-
             stars_label = tk.Label(review_frame, text=f"Stars: {review['stars']}", font=("Arial", 20),
                                    bg='#FEF0EF', fg='black')
             stars_label.pack(pady=5, padx=20)
@@ -403,11 +398,11 @@ class MainPage:
             user_label.pack(padx=20)
 
             # Display review text
-            text_widget = tk.Text(review_frame, wrap=tk.WORD, height=5, width=50, font=("Arial", 20), bg='#FEF0EF',
+            text_widget = tk.Text(review_frame, wrap=tk.WORD, height=5, width=50, font=("Arial", 20), bg='#FEF0EF', fg='black',
                                   bd=0, highlightthickness=0)
             text_widget.insert(tk.END, review['comment'])  # Insert the comment text
             text_widget.config(state=tk.DISABLED)  # Disable editing
-            text_widget.pack(side=tk.RIGHT, padx=20)
+            text_widget.pack(side=tk.LEFT, padx=20)
 
 
     def show_wedding_dresses(self):
@@ -570,7 +565,7 @@ class MainPage:
                             fg='black', labelanchor='n', width=500, height=300)
         box1.pack(side="left", expand=True, fill="both", padx=10, pady=10)
         box1.pack_propagate(False)
-        info1 = tk.Label(box1, text="Classic and timeless bridal gowns.", bg='white', fg='black', font=("Arial", 16))
+        info1 = tk.Label(box1, text="Classic and timeless bridal gowns.", bg='white', fg='black', font=("Lucida Calligraphy", 25))
         info1.pack(expand=True)
         box1.bind("<Button-1>", lambda e: self.show_collection_dresses(0))  # Show the first 10 dresses
 
@@ -580,7 +575,7 @@ class MainPage:
         box2.pack(side="right", expand=True, fill="both", padx=10, pady=10)
         box2.pack_propagate(False)
         info2 = tk.Label(box2, text="Modern designs with a touch of the stars.", bg='white', fg='black',
-                        font=("Arial", 16))
+                        font=("Lucida Calligraphy", 25))
         info2.pack(expand=True)
         box2.bind("<Button-1>", lambda e: self.show_collection_dresses(10))  # Show the last 10 dresses
 
@@ -698,7 +693,7 @@ class MainPage:
         menu_frame.pack(side=tk.TOP, pady=10)
 
         # Create a dropdown button for the account
-        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color,
+        self.account_menu = tk.Menubutton(menu_frame, text="Account", compound=tk.LEFT, bg=menu_bg_color, fg='black',
                                           font=("Brush Script MT", 18))
         self.account_menu.menu = tk.Menu(self.account_menu, tearoff=0)
         self.account_menu["menu"] = self.account_menu.menu
@@ -710,7 +705,7 @@ class MainPage:
         self.account_menu.pack(side=tk.RIGHT, padx=10)
         # Configure button style to remove button shape
         button_style = {"border": 1, "bg": menu_bg_color, "width": 13, "height": 2, "highlightbackground": "black",
-                        "relief": "solid"}
+                        "relief": "solid", "fg":"black"}
 
         buttons_data = [
             ("Wedding Dresses",

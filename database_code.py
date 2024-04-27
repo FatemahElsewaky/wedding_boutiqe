@@ -200,7 +200,6 @@ def display_view_data(view_name):
 
 
 # Example usage:
-display_view_data("dress_info_users")
 display_view_data("dress_info_employee")
 
 

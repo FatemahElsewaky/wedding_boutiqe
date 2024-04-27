@@ -18,8 +18,7 @@ c.execute(
           last_name VARCHAR(20),
           address_1 VARCHAR(50),
           email VARCHAR(50),
-          phone_number INTEGER(9),
-          order_history TEXT
+          phone_number INTEGER(9)
           )"""
 )
 

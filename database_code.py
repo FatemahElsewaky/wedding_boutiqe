@@ -109,16 +109,7 @@ c.execute(
           )"""
 )
 
-c.execute("DROP VIEW users_info;")
-c.execute("ALTER TABLE users DROP COLUMN order_history;")
-# # Create dress information view as a user
-# c.execute(
-#     """CREATE VIEW users_info AS
-#         SELECT u.username, u.password, u.first_name, u.last_name, u.address_1, u.email, u.phone_number, u.order_history,
-#                 p.credit_card_num, p.CVC, p.expiration_date
-#                 FROM users u
-#                 LEFT JOIN payment_info p ON u.username = p.payment_id"""
-# )
+
 
 # # Create dress information view as an employee
 # c.execute(
@@ -211,7 +202,6 @@ def display_view_data(view_name):
 # Example usage:
 display_view_data("dress_info_users")
 display_view_data("dress_info_employee")
-display_view_data("users_info")
 
 
 # Log in query (user)

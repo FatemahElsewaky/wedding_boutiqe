@@ -1304,7 +1304,7 @@ class CustomerLoginPage:
         elif not new_username or not new_password:
             self.message.config(text="Please enter both username and password.")
         else:
-            if create_user(new_username, new_password, firstname, lastname, "", "", "", ""):
+            if create_user(new_username, new_password, firstname, lastname, "", "", ""):
                 self.message.config(text="Sign up successful!")
                 self.master.destroy()  # Close the login window
                 root = tk.Toplevel()  # Create a new Tkinter root window for the main page

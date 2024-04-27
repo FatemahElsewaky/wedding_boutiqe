@@ -231,7 +231,7 @@ def create_user(username, password, first_name, last_name, address_1, email, pho
         with conn:
             # Insert username, password, first name, and last name into database
             c.execute(
-                "INSERT INTO users VALUES (:username, :password, :first_name, :last_name, :address_1, :email, :phone_number,:order_history )",
+                "INSERT INTO users VALUES (:username, :password, :first_name, :last_name, :address_1, :email, :phone_number)",
                 {
                     "username": username,
                     "password": password,
@@ -240,7 +240,6 @@ def create_user(username, password, first_name, last_name, address_1, email, pho
                     "address_1": address_1,
                     "email": email,
                     "phone_number": phone_number,
-                    "order_history": order_history,
                 },
             )
         return True

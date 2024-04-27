@@ -273,9 +273,9 @@ def fetch_user_data(username):
             'address_1': user_data[4],
             'email': user_data[5],
             'phone_number': user_data[6],
-            'credit_card_num': user_data[9],
-            'CVC': user_data[10],
-            'expiration_date': user_data[11]
+            'credit_card_num': user_data[8],
+            'CVC': user_data[9],
+            'expiration_date': user_data[10]
         }
     else:
         return None

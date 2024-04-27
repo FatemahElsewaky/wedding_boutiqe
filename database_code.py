@@ -109,7 +109,8 @@ c.execute(
           )"""
 )
 
-
+c.execute("DROP VIEW users_info;")
+c.execute("ALTER TABLE users DROP COLUMN order_history;")
 # # Create dress information view as a user
 # c.execute(
 #     """CREATE VIEW users_info AS
